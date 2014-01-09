@@ -1,5 +1,6 @@
 *.o
 *.d
+*.s
 threedee-test
 
 test/test
