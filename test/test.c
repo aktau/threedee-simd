@@ -86,13 +86,40 @@ static void test_quat_to_mat() {
     }
 }
 
+#define BENCH_ROUNDS 10000000
+
+#define BENCH_QUAT_FROM_AXISANGLE(_fn) \
+    NO_INLINE static vec4 loop_ ## _fn() { \
+        vec4 axisangle = vec(0.0f, 1.0f, 0.0f, T_PI4); \
+        vec4 qua = _fn(axisangle); \
+        for (int i = 0; i < BENCH_ROUNDS; ++i) { \
+            qua = _fn(qua); \
+        } \
+        return qua; \
+    }
+
+BENCH_QUAT_FROM_AXISANGLE(quat_axisangle)
+BENCH_QUAT_FROM_AXISANGLE(quat_axisangle_clever)
+BENCH_QUAT_FROM_AXISANGLE(quat_axisangle_shuf)
+
+static void bench_quat_from_axisangle() {
+    printf(BENCH_LINE "\n");
+
+    {
+        benchfn fns[] = { loop_quat_axisangle, loop_quat_axisangle_clever, loop_quat_axisangle_shuf };
+        const char *names[] = { "default", "clever", "shuf" };
+        benchmark(fns, names, NELEMS(fns));
+    }
+}
+
 int main() {
     test_quat_to_mat();
     test_mmmul();
     test_mvmul();
 
     printf("\nrunning benchmarks:\n");
-    bnch_mvmul();
+    bench_mvmul();
+    bench_quat_from_axisangle();
 
     return 0;
 }

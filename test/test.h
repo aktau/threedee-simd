@@ -10,6 +10,8 @@
 
 #include "bench.h"
 
+#define BENCH_LINE "==================="
+
 #define NELEMS(x)  (sizeof(x) / sizeof(x[0]))
 #define NO_INLINE __attribute__((noinline))
 
