@@ -14,6 +14,12 @@ static inline vec4 vsincos(vec4 x, vec4 * restrict s, vec4 * restrict c)
     *c = vec(cos(xs[0]), cos(xs[1]), cos(xs[2]), cos(xs[3]));
 }
 
+static inline vec4 vsin(vec4 x) __attribute__((always_inline));
+static inline vec4 vsin(vec4 x) {
+    float *xs = (float*)&x;
+    return vec(sin(xs[0]), sin(xs[1]), sin(xs[2]), sin(xs[3]));
+}
+
 #else
 
 #include "sse_mathfun.h"
@@ -22,6 +28,9 @@ static inline void vsincos(vec4 x, vec4 * restrict s, vec4 * restrict c)
 {
     sincos_ps(x, s, c);
 }
+
+static inline vec4 vsin(vec4 x) __attribute__((always_inline));
+static inline vec4 vsin(vec4 x) { return sin_ps(x); }
 
 #endif
 
