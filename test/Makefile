@@ -20,7 +20,7 @@ WARN:=-Wcast-align -Wcast-qual \
 ifeq ($(CC),gcc)
 	OPT+=-mfpmath=sse
 endif
-ifeq ($(CC),clang)
+ifneq (,$(findstring clang,$(CC)))
 	OPT+=-fslp-vectorize-aggressive
 endif
 CFLAGS+=$(STD) $(WARN) $(INC) $(DBG) $(OPT)
